@@ -1,0 +1,45 @@
+/*
+============================================================================
+ Name		: bld.inf
+ Author	  : Yuan
+ Copyright   : Your copyright notice
+ Description : This file provides the information required for building the
+				whole of a LcdEmulator.
+============================================================================
+*/
+
+PRJ_PLATFORMS
+WINSCW ARMV5 GCCE
+
+
+#ifdef SBSV2
+
+PRJ_EXTENSIONS
+	
+	START EXTENSION s60/mifconv
+	OPTION TARGETFILE lcdemulator_0xe76d00e8.mif
+	OPTION HEADERFILE lcdemulator_0xe76d00e8.mbg
+	OPTION SOURCEDIR ../gfx
+	OPTION SOURCES -c32 qgn_menu_LcdEmulator
+	END
+	
+	// help compiler is not always available; see similar comment in *.pkg file
+	START EXTENSION techview/bldhelp
+	OPTION HELPPROJECTFILE LcdEmulator.cshlp
+	OPTION HELPTOOLTARGETNAME lcdemulator_0xe76d00e8.hlp
+	END
+
+#else
+
+PRJ_MMPFILES
+
+	gnumakefile icons_scalable_dc.mk
+
+	// help compiler is not always available; see similar comment in *.pkg file
+	gnumakefile ../help/build_help.mk
+
+#endif
+
+PRJ_MMPFILES
+
+LcdEmulator.mmp

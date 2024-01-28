@@ -1,0 +1,62 @@
+/*
+============================================================================
+ Name		: LcdEmulator.mmp
+ Author	  : Yuan
+ Copyright   : Your copyright notice
+ Description : This is the project specification file for LcdEmulator.
+============================================================================
+*/
+
+MACRO _HELP_AVAILABLE_
+
+TARGET			LcdEmulator_0xe76d00e8.exe
+TARGETTYPE		exe
+UID		  0x100039CE 0xe76d00e8
+
+SOURCEPATH		..\src
+SOURCE			LcdEmulator.cpp
+SOURCE			LcdEmulatorApplication.cpp
+SOURCE			LcdEmulatorAppView.cpp
+SOURCE			LcdEmulatorAppUi.cpp
+SOURCE			LcdEmulatorDocument.cpp
+
+SOURCEPATH		..\data
+
+START RESOURCE	LcdEmulator.rss
+HEADER
+TARGET LcdEmulator_0xe76d00e8
+TARGETPATH resource\apps
+END //RESOURCE
+
+START RESOURCE	LcdEmulator_reg.rss
+TARGET LcdEmulator_0xe76d00e8_reg
+TARGETPATH 	  \private\10003a3f\apps
+END //RESOURCE
+
+USERINCLUDE	   ..\inc
+USERINCLUDE    ..\help
+
+SYSTEMINCLUDE	 /epoc32/include
+
+LIBRARY		   euser.lib
+LIBRARY		   apparc.lib
+LIBRARY		   cone.lib
+LIBRARY		   eikcore.lib
+LIBRARY		   avkon.lib
+LIBRARY		   commonengine.lib
+LIBRARY		   efsrv.lib 
+LIBRARY		   estor.lib
+LIBRARY        aknnotify.lib
+LIBRARY        hlplch.lib
+LIBRARY        eikcoctl.lib gdi.lib
+
+LANG SC
+
+VENDORID	  	  0
+SECUREID		  0xe76d00e8
+CAPABILITY	  	  ReadUserData
+
+DEBUGGABLE_UDEBONLY
+// End of File
+SOURCEPATH ..\src
+SOURCE CharLcmControl.cpp

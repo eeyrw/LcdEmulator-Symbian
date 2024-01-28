@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Symbian package files
+*.sis
+*.sisx
