@@ -14,7 +14,6 @@
 #include <coecntrl.h>
 #include "CharLcmControl.h"
 #include <eiklabel.h>  // for example label control
-
 // CLASS DECLARATION
 class CLcdEmulatorAppView : public CCoeControl
 	{
@@ -47,7 +46,7 @@ public:
 	virtual ~CLcdEmulatorAppView();
 
 public:
-	
+
 	CCoeControl* ComponentControl(TInt aIndex) const;
 	TInt CountComponentControls() const;
 	// Functions from base classes
@@ -91,9 +90,9 @@ private:
 	 * C++ default constructor.
 	 */
 	CLcdEmulatorAppView();
-	
-	CCharLcmControl* iCharLcmControl;	  // and its own status window.
-    CEikLabel* iLabel;          // example label
+public:
+	CCharLcmControl* iCharLcmControl; // and its own status window.
+	CEikLabel* iLabel; // example label
 	};
 
 #endif // __LCDEMULATORAPPVIEW_h__

@@ -53,24 +53,25 @@ void CLcdEmulatorAppView::ConstructL(const TRect& aRect)
 
 	// Activate the window, which makes it ready to be drawn
 	//ActivateL();
-	
-	
+
+
 	CreateWindowL();
 	/*
-	iLabel = new (ELeave) CEikLabel;
-	iLabel->SetContainerWindowL( *this );
-	iLabel->SetTextL( _L("Example View") );
-	iToDoLabel = new (ELeave) CEikLabel;
-	iToDoLabel->SetContainerWindowL( *this );
-	iToDoLabel->SetTextL( _L("Add Your controls\n here") );*/
+	 iLabel = new (ELeave) CEikLabel;
+	 iLabel->SetContainerWindowL( *this );
+	 iLabel->SetTextL( _L("Example View") );
+	 iToDoLabel = new (ELeave) CEikLabel;
+	 iToDoLabel->SetContainerWindowL( *this );
+	 iToDoLabel->SetTextL( _L("Add Your controls\n here") );*/
 	iCharLcmControl = CCharLcmControl::NewL(Window());
-    iLabel = new (ELeave) CEikLabel;
-    iLabel->SetContainerWindowL( *this );
-    iLabel->SetTextL( _L("MyView 1\n\nSelect local view\nswitching from menu") );
+	iLabel = new (ELeave) CEikLabel;
+	iLabel->SetContainerWindowL(*this);
+	iLabel->SetTextL(_L("MyView 1\n\nSelect local view\nswitching from menu"));
+	iCharLcmControl->write("Haha hahahah...",sizeof("Haha hahahah...")-1);
 	SetRect(aRect);
 	SetExtentToWholeScreen();
 	ActivateL();
-	
+
 	}
 
 // -----------------------------------------------------------------------------
@@ -110,21 +111,20 @@ void CLcdEmulatorAppView::Draw(const TRect& /*aRect*/) const
 
 	// Clears the screen
 	//gc.Clear(drawRect);
-	
+
 	}
 CCoeControl* CLcdEmulatorAppView::ComponentControl(TInt aIndex) const
 	{
-	
-	_LIT(KMsgDebug,"ComponentControl index: %d");    
-	RDebug::Print(KMsgDebug,aIndex);
-	if(aIndex==0)
+	_LIT(KMsgDebug,"ComponentControl index: %d");
+	RDebug::Print(KMsgDebug, aIndex);
+//	if (aIndex == 0)
 		return iCharLcmControl;
-	else
-		return iLabel;
+//	else
+//		return iLabel;
 	}
 TInt CLcdEmulatorAppView::CountComponentControls() const
 	{
-	return 2;
+	return 1;
 	}
 // -----------------------------------------------------------------------------
 // CLcdEmulatorAppView::SizeChanged()
@@ -135,7 +135,7 @@ void CLcdEmulatorAppView::SizeChanged()
 	{
 	TRect rect = Rect();
 	iCharLcmControl->SetRect(rect);
-	   iLabel->SetExtent( TPoint(50,50), iLabel->MinimumSize() );
+	iLabel->SetExtent(TPoint(50, 50), iLabel->MinimumSize());
 	}
 
 // -----------------------------------------------------------------------------

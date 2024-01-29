@@ -16,6 +16,10 @@
 #include <e32base.h>
 #include <coecntrl.h>
 #include <coedef.h>
+#include "FontGenerator.h"
+#include <w32std.h>
+
+#define MAX_DISPLAY_CHAR_LEN 512
 
 // CLASS DECLARATION
 
@@ -38,7 +42,7 @@ public:
 	 */
 	static CCharLcmControl* NewL(RWindow& aWindow);
 
-
+	void SizeChanged();
 private:
 
 	/**
@@ -57,6 +61,53 @@ private:
 	 */
 	void Draw(const TRect& aRect) const;
 
+	
+	
+private:
+    // Color
+    TRgb mPositivePixelColor;
+    TRgb mNegativePixelColor;
+    TRgb mLcdPanelColor;
+
+    // SurfaceView
+    int mSurfaceHeight;
+    int mSurfaceWidth;
+
+    // Virtual LCM property
+    int mColNum;
+    int mRowNum;
+
+    int mCursorX;
+    int mCursorY;
+
+    char mLcmChars[1024];
+    char mCustomCharsRaw[1024];
+
+    // Font generation class instance
+    CFontGenerator* mFontGen;
+
+    bool mIsFullScreen;
+
+public:
+    TRgb getNegativePixelColor();
+    void setNegativePixelColor(TRgb &mNegativePixelColor);
+    TRgb getPositivePixelColor();
+    void setPositivePixelColor(TRgb &mPositivePixelColor);
+    TRgb getLcdPanelColor();
+    void setLcdPanelColor(TRgb &mLcdPanelColor);
+    void forceReDraw();
+    void write(const char *data, int len);
+    void setCustomFont(int index, char* rawdata, int len);
+    void clearScreen();
+    void setCursor(int x, int y);
+    void setCursor(TPoint &cursor);
+    void getCursor(int &x, int &y);
+    void getCursor(TPoint &cursor);
+    void reGenResoures();
+    void setColRow(int col, int row);
+    void getColRow(int col, int row);
+    void switchFullScreen(bool isFullScreen);
+	
 	};
 
 #endif // CHARLCMCONTROL_H

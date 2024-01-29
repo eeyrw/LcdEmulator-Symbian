@@ -123,6 +123,7 @@ void CLcdEmulatorAppUi::HandleCommandL(TInt aCommand)
 
 			// Pop HBuf from CleanUpStack and Destroy it.
 			CleanupStack::PopAndDestroy(textResource);
+			iAppView->iCharLcmControl->write("Hello world!",sizeof("Hello world!")-1);
 			}
 			break;
 		case ECommand2:

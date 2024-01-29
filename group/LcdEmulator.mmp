@@ -48,7 +48,7 @@ LIBRARY		   efsrv.lib
 LIBRARY		   estor.lib
 LIBRARY        aknnotify.lib
 LIBRARY        hlplch.lib
-LIBRARY        eikcoctl.lib gdi.lib
+LIBRARY        eikcoctl.lib gdi.lib bitgdi.lib fbscli.lib
 
 LANG SC
 
@@ -59,4 +59,4 @@ CAPABILITY	  	  ReadUserData
 DEBUGGABLE_UDEBONLY
 // End of File
 SOURCEPATH ..\src
-SOURCE CharLcmControl.cpp
+SOURCE CharLcmControl.cpp FontGenerator.cpp
