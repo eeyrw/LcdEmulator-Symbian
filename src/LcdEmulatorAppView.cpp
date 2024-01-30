@@ -67,7 +67,8 @@ void CLcdEmulatorAppView::ConstructL(const TRect& aRect)
 	iLabel = new (ELeave) CEikLabel;
 	iLabel->SetContainerWindowL(*this);
 	iLabel->SetTextL(_L("MyView 1\n\nSelect local view\nswitching from menu"));
-	iCharLcmControl->write("Haha hahahah...",sizeof("Haha hahahah...")-1);
+	iCharLcmControl->clearScreen();
+	iCharLcmControl->write("Haha hahahah...",sizeof("Haha hahahah..."));
 	SetRect(aRect);
 	SetExtentToWholeScreen();
 	ActivateL();
@@ -104,10 +105,10 @@ CLcdEmulatorAppView::~CLcdEmulatorAppView()
 void CLcdEmulatorAppView::Draw(const TRect& /*aRect*/) const
 	{
 	// Get the standard graphics context
-	CWindowGc& gc = SystemGc();
+	//CWindowGc& gc = SystemGc();
 
 	// Gets the control's extent
-	TRect drawRect(Rect());
+	//TRect drawRect(Rect());
 
 	// Clears the screen
 	//gc.Clear(drawRect);

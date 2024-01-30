@@ -65,9 +65,11 @@ void CFontGenerator::ConstructL(TPoint &colRowSize, TPoint &areaSize, char* cust
     mColRowSize = colRowSize;
     mSurfaceWidth = areaSize.iX;
     mSurfaceHeight = areaSize.iY;
-    //mCustomFontRawData = customFontRawData;
     
-    //reGenFontL();
+    mPoint2PointMode = true;
+    
+    memcpy(mCustomFontRawData,customFontRawData,64);
+    
 	}
 
 const TUint8 mRawFontsData[] = {
@@ -180,7 +182,10 @@ const TUint8 mRawFontsData[] = {
     mCustomFontRawData = customFontRawData;
     // reGenFont();
 }*/
-
+double round(double x)
+	{
+	return (double)(int)(x+0.5);
+	}
 void CFontGenerator::reGenFontL()
 {
 	
@@ -195,22 +200,55 @@ void CFontGenerator::reGenFontL()
     // mMarginWeight*2+rowNum*(mPixelWeight*mPixelsPerCol+mPixelSpaceWeight*(mPixelsPerCol-1))+(rowNum-1)*2*mCharSpaceWeight
     mUnitHeight = mSurfaceHeight / (mMarginWeight * 2 + rowNum * (mPixelWeight * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1)) + (rowNum - 1) * 2 * mCharSpaceWeight);
 
+    mPixelWidth = mUnitWidth * mPixelWeight;
+    mPixelHeight = mUnitHeight * mPixelWeight;
+
+    mPixelSpaceWidth = mUnitWidth * mPixelSpaceWeight;
+    mPixelSpaceHeight = mUnitHeight * mPixelSpaceWeight;
+    mCharSpaceWidth = mUnitWidth * mCharSpaceWeight;
+    mCharSpaceHeight = mUnitHeight * mCharSpaceWeight;
+    
+ 	mMarginWidth = mUnitWidth*mMarginWeight;
+ 	mMarginHeight = mUnitHeight*mMarginWeight;
+    
+   if(mPoint2PointMode)
+    	{
+    	mPixelWidth = round(mPixelWidth);
+    	mPixelHeight = round(mPixelHeight);
+    	mPixelSpaceWidth = round(mPixelSpaceWidth);
+    	mPixelSpaceHeight = round(mPixelSpaceHeight);
+    	mCharSpaceWidth = round(mCharSpaceWidth);
+    	mCharSpaceHeight = round(mCharSpaceHeight);
+    	}
+    
+    mSingleCharWidth = mPixelWidth*mPixelsPerRow + mPixelSpaceWidth * (mPixelsPerRow - 1);
+    mSingleCharHeight  = mPixelHeight* mPixelsPerCol + mPixelSpaceHeight * (mPixelsPerCol - 1);
+    
+    mCharWidthOffset = mSingleCharWidth + mCharSpaceWidth;
+    mCharHeightOffset = mSingleCharHeight+ mCharSpaceHeight*2;
+    
+    
+    if(mPoint2PointMode)
+     	{
+     	double contentWidth = mSingleCharWidth*colNum+mCharSpaceWidth*(colNum-1);
+     	double contentHeight = mSingleCharHeight*rowNum+mCharSpaceHeight*2*(rowNum-1);
+     	mMarginWidth = round((mSurfaceWidth-contentWidth)/2);
+     	mMarginHeight = round((mSurfaceHeight-contentHeight)/2);
+     	
+     	}    
+    
     genMainFontBitmapL(mUnitWidth, mUnitHeight);
     genCustomFontBitmapL(mCustomFontRawData, mUnitWidth, mUnitHeight);
 
-    mCharWidthOffset = mUnitWidth * (mPixelWeight * mPixelsPerRow + mPixelSpaceWeight * (mPixelsPerRow - 1) + mCharSpaceWeight);
-    mCharHeightOffset = mUnitHeight * (mPixelWeight * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1) + mCharSpaceWeight * 2);
+
 }
 
 CFbsBitmap* CFontGenerator::genSingleCustomFontBitmapL(char* raw, double unitWidth, double unitHeight)
 {
 
-    int bitmapWidth = (int)(unitWidth * (mPixelWeight * mPixelsPerRow + mPixelSpaceWeight * (mPixelsPerRow - 1)));
-    int bitmapHeight = (int)(unitHeight * (mPixelWeight * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1)));
-
     // create a bitmap to be used off-screen
     CFbsBitmap* fontBitmap = new (ELeave) CFbsBitmap();
-    User::LeaveIfError(fontBitmap->Create(TSize(bitmapWidth,bitmapHeight),EColor16M));
+    User::LeaveIfError(fontBitmap->Create(TSize(mSingleCharWidth,mSingleCharHeight),EColor16M));
     CleanupStack::PushL(fontBitmap);
     
     // create an off-screen device and context
@@ -223,10 +261,7 @@ CFbsBitmap* CFontGenerator::genSingleCustomFontBitmapL(char* raw, double unitWid
     bitmapContext->SetBrushStyle(CGraphicsContext::ESolidBrush);
     bitmapContext->SetBrushColor(mLcdPanelColor);
     bitmapContext->SetPenStyle(CGraphicsContext::ENullPen);
-    bitmapContext->DrawRect(TRect(TPoint(0,0),TSize(bitmapWidth,bitmapHeight)));
-
-    double charPixelWidth = mUnitWidth * mPixelWeight;
-    double charPixelHeight = mUnitHeight * mPixelWeight;
+    bitmapContext->DrawRect(TRect(TPoint(0,0),TSize(mSingleCharWidth,mSingleCharHeight)));
 
 
     for (int y = 0; y < mPixelsPerCol; ++y)
@@ -234,11 +269,11 @@ CFbsBitmap* CFontGenerator::genSingleCustomFontBitmapL(char* raw, double unitWid
         for (int x = 0; x < mPixelsPerRow; ++x)
         {
 
-            int pixelRectLeft = (int)(x * (charPixelWidth + mPixelSpaceWeight * mUnitWidth)+0.5);
-            int pixelRectTop = (int)(y * (charPixelHeight + mPixelSpaceWeight * mUnitHeight)+0.5);
+            int pixelRectLeft = (int)(x * (mPixelWidth + mPixelSpaceWidth)+0.5);
+            int pixelRectTop = (int)(y * (mPixelHeight + mPixelSpaceHeight)+0.5);
 
             TRect pixelRect = TRect(TPoint(pixelRectLeft, pixelRectTop),
-                                      TSize(charPixelWidth, charPixelHeight));
+            		TSize((int)(mPixelWidth+0.5), (int)(mPixelHeight+0.5)));
             if ((raw[y] & (1 << x)) != 0)
                 {
                 	bitmapContext->SetBrushColor(mPositivePixelColor);
@@ -258,12 +293,9 @@ CFbsBitmap* CFontGenerator::genSingleCustomFontBitmapL(char* raw, double unitWid
 
 CFbsBitmap* CFontGenerator::genSingleFontBitmapL(int fontIndex, double unitWidth, double unitHeight)
 {
-    int bitmapWidth = (int)(unitWidth * (mPixelWeight * mPixelsPerRow + mPixelSpaceWeight * (mPixelsPerRow - 1)));
-    int bitmapHeight = (int)(unitHeight * (mPixelWeight * mPixelsPerCol + mPixelSpaceWeight * (mPixelsPerCol - 1)));
-
     // create a bitmap to be used off-screen
     CFbsBitmap* fontBitmap = new (ELeave) CFbsBitmap();
-    User::LeaveIfError(fontBitmap->Create(TSize(bitmapWidth,bitmapHeight),EColor16M));
+    User::LeaveIfError(fontBitmap->Create(TSize(mSingleCharWidth,mSingleCharHeight),EColor16M));
     CleanupStack::PushL(fontBitmap);
     
     // create an off-screen device and context
@@ -276,22 +308,21 @@ CFbsBitmap* CFontGenerator::genSingleFontBitmapL(int fontIndex, double unitWidth
     bitmapContext->SetBrushStyle(CGraphicsContext::ESolidBrush);
     bitmapContext->SetBrushColor(mLcdPanelColor);
     bitmapContext->SetPenStyle(CGraphicsContext::ENullPen);
-    bitmapContext->DrawRect(TRect(TPoint(0,0),TSize(bitmapWidth,bitmapHeight)));
+    bitmapContext->DrawRect(TRect(TPoint(0,0),TSize(mSingleCharWidth,mSingleCharHeight)));
     
    
-    double charPixelWidth = mUnitWidth * mPixelWeight;
-    double charPixelHeight = mUnitHeight * mPixelWeight;
+
 
     for (int y = 0; y < mPixelsPerCol; ++y)
     {
         for (int x = 0; x < mPixelsPerRow; ++x)
         {
 
-            int pixelRectLeft = (int)(x * (charPixelWidth + mPixelSpaceWeight * mUnitWidth)+0.5);
-            int pixelRectTop = (int)(y * (charPixelHeight + mPixelSpaceWeight * mUnitHeight)+0.5);
+            int pixelRectLeft = (int)(x * (mPixelWidth + mPixelSpaceWidth)+0.5);
+            int pixelRectTop = (int)(y * (mPixelHeight + mPixelSpaceHeight)+0.5);
 
             TRect pixelRect = TRect(TPoint(pixelRectLeft, pixelRectTop),
-                                      TSize(charPixelWidth, charPixelHeight));
+            		TSize((int)(mPixelWidth+0.5), (int)(mPixelHeight+0.5)));
             if ((mRawFontsData[(int)(fontIndex * mPixelsPerRow + x)] & (1 << y)) != 0)
             {
             	bitmapContext->SetBrushColor(mPositivePixelColor);
@@ -332,7 +363,7 @@ void CFontGenerator::genCustomFontBitmapL(char* allRawData, double unitWidth, do
     for (int fontIndex = 0; fontIndex < fontNum; ++fontIndex)
     {
         memcpy(temp, allRawData + fontIndex * 8, 8);
-        User::LeaveIfError(mFontBitmapMain.Append(
+        User::LeaveIfError(mFontBitmapCustom.Append(
         				genSingleCustomFontBitmapL(temp,unitWidth, unitHeight)));
     }
     //Log.i(TAG, "Main font generated.");
@@ -350,8 +381,8 @@ TPoint CFontGenerator::getColRowSize()
 
 void CFontGenerator::getActualCursor(TPoint &cursor, TPoint &actualCursor)
 {
-    actualCursor.SetXY(mMarginWeight * mUnitWidth + mCharWidthOffset * cursor.iX,
-    		mMarginWeight * mUnitHeight + mCharHeightOffset * cursor.iY);
+    actualCursor.SetXY((TInt)(mMarginWidth + mCharWidthOffset * cursor.iX+0.5),
+    		(TInt)(mMarginHeight + mCharHeightOffset * cursor.iY+0.5));
 }
 
 void CFontGenerator::getActualCursor(int x, int y, TPoint &actualCursor)

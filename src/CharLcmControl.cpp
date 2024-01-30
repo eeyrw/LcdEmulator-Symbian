@@ -42,9 +42,9 @@ void CCharLcmControl::ConstructL(RWindow& aWindow)
 	mColNum = 20;
 	mRowNum = 6;
 
-	mPositivePixelColor = KRgbWhite;
-	mNegativePixelColor = KRgbDarkGray;
-	mLcdPanelColor = KRgbBlack;
+	mPositivePixelColor = KRgbRed;
+	mNegativePixelColor = TRgb(0xcccccc);
+	mLcdPanelColor = TRgb(0xeeeeee);
 
 	for (int i = 0; i < 8 * 8; i++)
 		{
@@ -91,9 +91,9 @@ void CCharLcmControl::Draw(const TRect& /*aRect*/) const
 			mFontGen->getActualCursor(x, y, postion); // y*mColNum+x+32
 			// now do what you want with it, such as blitting to the screen
 			//CFbsBitmap* fontBitmap = mFontGen->genSingleFontBitmapL(43, 0.2,0.2);
-					
+
 			CFbsBitmap* fontBitmap = mFontGen->getCharBitmap(mLcmChars[dy + x]);
-			if(fontBitmap!=NULL)
+			if (fontBitmap != NULL)
 				{
 				gc.BitBlt(postion, fontBitmap);
 				//gc.DrawBitmap(postion,fontBitmap);
@@ -242,58 +242,9 @@ void CCharLcmControl::setColRow(int col, int row)
 	forceReDraw();
 	}
 
-void CCharLcmControl::getColRow(int col, int row)
+void CCharLcmControl::getColRow(int &col, int &row)
 	{
 	col = mColNum;
 	row = mRowNum;
 	}
 
-/*void CCharLcmControl::resizeEvent(QResizeEvent *event)
- {
- Q_UNUSED(event)
- mSurfaceHeight = height();
- mSurfaceWidth = width();
- reGenResoures();
- forceReDraw();
- }
-
- void CCharLcmControl::paintEvent(QPaintEvent *event)
- {
- Q_UNUSED(event)
- QPainter painter(this);
-
- //    //ÉèÖÃQPainterµÄ»æÍ¼Çø
- QRect rect(0, 0, width(), height());
- painter.setViewport(rect);
- painter.setRenderHint(QPainter::Antialiasing);
-
- mSurfaceHeight = height();
- mSurfaceWidth = width();
-
- QBrush brush;
- brush.setStyle(Qt::SolidPattern);
- //painter.setRenderHint(QPainter::Antialiasing);
- brush.setColor(mLcdPanelColor);
- brush.setStyle(Qt::SolidPattern);
- painter.setBrush(brush);
- painter.setPen(Qt::NoPen);
-
- painter.fillRect(rect, brush);
- int dy = 0;
- QPointF postion = QPointF();
-
- for (int y = 0; y < mRowNum; y++)
- {
- for (int x = 0; x < mColNum; x++)
- {
- mFontGen.getActualCursor(x, y, &postion); // y*mColNum+x+32
- painter.drawPixmap(postion, mFontGen.getCharBitmap(mLcmChars[dy + x]));
- }
- dy += mColNum;
- }
- }*/
-
-void CCharLcmControl::switchFullScreen(bool isFullScreen)
-	{
-	//TODO:
-	}

@@ -26,7 +26,8 @@
 #include "LcdEmulatorApplication.h"
 #include "LcdEmulatorAppUi.h"
 #include "LcdEmulatorAppView.h"
-
+#include <HWRMLight.h>
+#include <AknKeyLock.h> 
 _LIT( KFileName, "C:\\private\\e76d00e8\\LcdEmulator.txt" );
 _LIT( KText, "Hello World!");
 
@@ -67,6 +68,22 @@ void CLcdEmulatorAppUi::ConstructL()
 	outputFileStream << KText;
 
 	CleanupStack::PopAndDestroy(2); // outputFileStream, file
+	
+	//CHWRMLight* light = CHWRMLight::NewLC(); // No callbacks
+	//light->ReserveLightL(CHWRMLight::EPrimaryDisplay, EFalse, EFalse );
+	//light-> LightOnL (CHWRMLight::EPrimaryDisplay, KHWRMInfiniteDuration); // Turn display lights on for five seconds.
+	//CleanupStack::PopAndDestroy(light);
+
+    
+
+	RAknKeyLock keylock;
+	User::LeaveIfError(keylock.Connect());
+	CleanupClosePushL(keylock);
+	TBool isLockEn = keylock.IsKeyLockEnabled();
+	keylock.DisableKeyLock();
+	keylock.Close(); // fourth step
+	CleanupStack::PopAndDestroy(); // keyLock        
+
 
 	}
 // -----------------------------------------------------------------------------
@@ -123,6 +140,7 @@ void CLcdEmulatorAppUi::HandleCommandL(TInt aCommand)
 
 			// Pop HBuf from CleanUpStack and Destroy it.
 			CleanupStack::PopAndDestroy(textResource);
+			iAppView->iCharLcmControl->clearScreen();
 			iAppView->iCharLcmControl->write("Hello world!",sizeof("Hello world!")-1);
 			}
 			break;

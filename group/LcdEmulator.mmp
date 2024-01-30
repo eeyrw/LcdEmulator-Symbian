@@ -48,13 +48,13 @@ LIBRARY		   efsrv.lib
 LIBRARY		   estor.lib
 LIBRARY        aknnotify.lib
 LIBRARY        hlplch.lib
-LIBRARY        eikcoctl.lib gdi.lib bitgdi.lib fbscli.lib
+LIBRARY        eikcoctl.lib gdi.lib bitgdi.lib fbscli.lib hwrmlightclient.lib
 
 LANG SC
 
 VENDORID	  	  0
 SECUREID		  0xe76d00e8
-CAPABILITY	  	  ReadUserData
+CAPABILITY	  	  PowerMgmt ReadUserData
 
 DEBUGGABLE_UDEBONLY
 // End of File

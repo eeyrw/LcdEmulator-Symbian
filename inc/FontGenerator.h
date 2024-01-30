@@ -83,6 +83,19 @@ private:
 
 	double mCharWidthOffset;
 	double mCharHeightOffset;
+	
+	double mSingleCharWidth;
+	double mSingleCharHeight;
+	
+	double mPixelWidth;
+	double mPixelHeight;
+	
+	double mPixelSpaceWidth;
+	double mPixelSpaceHeight;
+	double mCharSpaceWidth;
+	double mCharSpaceHeight;
+	double mMarginWidth;
+	double mMarginHeight;
 
 	double mSurfaceWidth;
 	double mSurfaceHeight;
@@ -107,6 +120,8 @@ private:
 	TRgb mPositivePixelColor;
 	TRgb mNegativePixelColor;
 	TRgb mLcdPanelColor;
+	
+	bool mPoint2PointMode;
 	};
 
 #endif // FONTGENERATOR_H

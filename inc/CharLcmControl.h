@@ -105,8 +105,7 @@ public:
     void getCursor(TPoint &cursor);
     void reGenResoures();
     void setColRow(int col, int row);
-    void getColRow(int col, int row);
-    void switchFullScreen(bool isFullScreen);
+    void getColRow(int &col, int &row);
 	
 	};
 
