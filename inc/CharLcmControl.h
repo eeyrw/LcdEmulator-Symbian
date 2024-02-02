@@ -97,6 +97,7 @@ public:
     void setLcdPanelColor(TRgb &mLcdPanelColor);
     void forceReDraw();
     void write(const char *data, int len);
+    void showString(const TDes8& str);
     void setCustomFont(int index, char* rawdata, int len);
     void clearScreen();
     void setCursor(int x, int y);

@@ -94,6 +94,11 @@ RESOURCE MENU_PANE r_menu
 				},
 		MENU_ITEM
 				{
+				command = ECmdStopTimer;
+				txt = qtn_stop_timer;
+				},				
+		MENU_ITEM
+				{
 				command = EHelp;
 				txt = qtn_help;
 				},

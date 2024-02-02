@@ -12,13 +12,16 @@
 //  LOCALISATION STRINGS
 
 // Caption string for app.
-#define qtn_caption_string "LcdEmulator"
+#define qtn_caption_string "LCD Emulator"
 
 // First item in "Options" menu pane
 #define qtn_command1 "Message"
 
 // Second item in "Options" menu pane
 #define qtn_command2 "Message from file"
+
+// Second item in "Options" menu pane
+#define qtn_stop_timer "Stop Timer"
 
 #define qtn_help "Help"
 

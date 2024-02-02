@@ -62,6 +62,8 @@ private:
 	 *  size is changed.
 	 */
 	void HandleStatusPaneSizeChange();
+	
+	virtual void HandleResourceChangeL( TInt aType );
 
 	/**
 	 *  From CCoeAppUi, HelpContextL.
@@ -69,7 +71,30 @@ private:
 	 *  size is changed.
 	 */
 	CArrayFix<TCoeHelpContext>* HelpContextL() const;
+	void SendUart(void);
+    /**
+    * DoPeriodTask.
+    * Called by period task static function.
+    */
+    void DoPeriodTask();
 
+    /**
+    * Period.
+    * Call back function for a periodic timer
+    * @param aPtr a parameter passed to the timer when the timer is started.
+    * @return Value TRUE indicates the callback should be done again.
+    */
+    static TInt Period( TAny* aPtr );
+    /**
+    * StartTimer.
+    * Start the timer.
+    */
+    void StartKeepScreenOnTimer();
+    /**
+    * StopDemo
+    * Stop animation.
+    */
+    void StopKeepScreenOnTimer();
 private:
 	// Data
 
@@ -78,6 +103,7 @@ private:
 	 * Owned by CLcdEmulatorAppUi
 	 */
 	CLcdEmulatorAppView* iAppView;
+	CPeriodic* iKeepScreenOnTimer;
 
 	};
 

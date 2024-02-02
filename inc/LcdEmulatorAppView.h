@@ -73,6 +73,32 @@ public:
 	 */
 	virtual void HandlePointerEventL(const TPointerEvent& aPointerEvent);
 
+	
+    /**
+    * DoPeriodTask.
+    * Called by period task static function.
+    */
+    void DoPeriodTask();
+
+    /**
+    * Period.
+    * Call back function for a periodic timer
+    * @param aPtr a parameter passed to the timer when the timer is started.
+    * @return Value TRUE indicates the callback should be done again.
+    */
+    static TInt Period( TAny* aPtr );
+    /**
+    * StartTimer.
+    * Start the timer.
+    */
+    void StartTimer();
+    /**
+    * StopDemo
+    * Stop animation.
+    */
+    void StopTimer();
+	void SetFullRect();
+	void CalculateFullscreenRect();	
 private:
 	// Constructors
 
@@ -90,9 +116,14 @@ private:
 	 * C++ default constructor.
 	 */
 	CLcdEmulatorAppView();
+	
 public:
 	CCharLcmControl* iCharLcmControl; // and its own status window.
 	CEikLabel* iLabel; // example label
+	CPeriodic* iPeriodicTimer;
+	TInt counter;
+	TRect iFullRect;
+	TBool iIsCBAVisible;
 	};
 
 #endif // __LCDEMULATORAPPVIEW_h__

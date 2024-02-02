@@ -173,6 +173,18 @@ void CCharLcmControl::write(const char *data, int len)
 	forceReDraw();
 	}
 
+void CCharLcmControl::showString(const TDes8& str)
+	{
+	TInt offest = mCursorX + mCursorY * mColNum;
+	TInt writeLen = str.Length();
+	TInt maxLen = offest+writeLen <= mRowNum * mColNum ? writeLen: mRowNum * mColNum-offest;
+	for (int i = 0; i < maxLen; i++)
+		{
+		mLcmChars[offest + i] = str[i];
+		}
+	forceReDraw();
+	}
+
 void CCharLcmControl::setCustomFont(int index, char* rawdata, int len)
 	{
 	memcpy(mCustomCharsRaw + index * 8, rawdata, len);

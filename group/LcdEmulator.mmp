@@ -48,15 +48,16 @@ LIBRARY		   efsrv.lib
 LIBRARY		   estor.lib
 LIBRARY        aknnotify.lib
 LIBRARY        hlplch.lib
-LIBRARY        eikcoctl.lib gdi.lib bitgdi.lib fbscli.lib hwrmlightclient.lib
+LIBRARY        eikcoctl.lib gdi.lib bitgdi.lib fbscli.lib hwrmlightclient.lib c32.lib
 
 LANG SC
 
 VENDORID	  	  0
 SECUREID		  0xe76d00e8
-CAPABILITY	  	  PowerMgmt ReadUserData
+CAPABILITY	  	  LocalServices NetworkServices ReadUserData WriteUserData
 
-DEBUGGABLE_UDEBONLY
 // End of File
 SOURCEPATH ..\src
 SOURCE CharLcmControl.cpp FontGenerator.cpp
+
+DEBUGGABLE_UDEBONLY
